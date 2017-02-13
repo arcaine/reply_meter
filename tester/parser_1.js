@@ -14,14 +14,7 @@ request(requestOptions, function(error, response, body) {
   var strContents = new Buffer(body);
   var body = iconv.decode(strContents, 'EUC-KR').toString();
   var $ = cheerio.load(body);
-  $('script').remove()
-  var title = $("div.article_header div.article_info h3").text().toString();
-  var article = $("div#articleBodyContents").text().toString();
-  // var scripts = $("div#div#articleBodyContents script");
-  // var article = article.replace(scripts,"")
-  // article = article.replace("<script></script>")
-  console.log("_______________________________");
-  console.log("제목:"+title);
-  console.log("내용:"+article);
+  var body = $("div.article_header div.article_info h3").text().toString();
+  console.log(body);
   //일단은 전체 내용은 디코드하기 -> 그다음에 cheerio 처리등을 진행해야 함
 });
