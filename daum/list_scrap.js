@@ -2,7 +2,7 @@ var request = require("request");
 var cheerio = require('cheerio');
 var iconv  = require('iconv-lite');
 
-var url = "http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=100#&date=2017-02-15%2000:00:00&page=3"
+var url = "http://media.daum.net/breakingnews/politics?page=3"
 
 var requestOptions  = { method: "GET"
                 ,uri: url
@@ -12,7 +12,7 @@ var requestOptions  = { method: "GET"
 
 var getid = function(a){
  var b = a.toString()
- var c = b.substring(b.length,b.length-10)
+ var c = b.substring(b.length,b.length-17)
  return c
 }
 
@@ -21,15 +21,15 @@ var result = {}
 request(requestOptions, function(error, response, body) {
   // 전달받은 결과를 EUC-KR로 디코딩하여 출력한다.
   var strContents = new Buffer(body);
-  var body = iconv.decode(strContents, 'EUC-KR').toString();
+  // var body = iconv.decode(strContents, 'EUC-KR').toString();
   var $ = cheerio.load(body);
-  var postlists = $("div.section_body ul");
+  var postlists = $("ul.list_news2");
   postlists.each(function(){
     var article_lists = $(this).find("li")
     article_lists.each(function(){
-      var article_name = $(this).find("a strong").text().trim();
-      var article_company = $(this).find("span.writing").text().trim();
-      var article_url = $(this).find("a").attr("href");
+      var article_name = $(this).find("div.cont_thumb a").text().trim();
+      var article_company = $(this).find("div.cont_thumb span.info_news").text().trim();
+      var article_url = $(this).find("div.cont_thumb a").attr("href");
       var article_id = getid(article_url)
       // console.log(article_id)
       // console.log("title: "+article_name)
@@ -40,7 +40,7 @@ request(requestOptions, function(error, response, body) {
         company:article_company,
         url:article_url
       }
-      result["n"+article_id] = a
+      result["d"+article_id] = a
     });
   });
   // console.log(body);
