@@ -42,7 +42,9 @@ function getdata(page, callback){
       var article_lists = $(this).find("li")
       article_lists.each(function(){
         var article_name = $(this).find("div.cont_thumb a").text().trim();
-        var article_company = $(this).find("div.cont_thumb span.info_news").text().trim();
+        var article_s = $(this).find("div.cont_thumb span.info_news").text().trim();
+        var article_company =article_s.split("·")[0].trim()
+        var article_wr_time = article_s.split("·")[1].trim()
         var article_url = $(this).find("div.cont_thumb a").attr("href");
         var article_id = getid(article_url)
         // console.log(article_id)
@@ -52,7 +54,8 @@ function getdata(page, callback){
         var a = {
           title:article_name,
           company:article_company,
-          url:article_url
+          url:article_url,
+          wr_time:article_wr_time
         }
         result["d"+article_id] = a
       });
@@ -106,8 +109,9 @@ var gtd = function(pagelimit,callback){
   })
 }
 
-gtd(2,function(big1){
+gtd(1,function(big1){
   console.log(Object.size(big1))
+  console.log(big1)
 })
 
 // function getalldata(pagelimit, callback){

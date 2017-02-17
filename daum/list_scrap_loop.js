@@ -57,7 +57,6 @@ var getdata =function(page){
 var tasks = []
 var several_pages = function(number){
   for(var i =1, i <number, i++){
-      getdata(number)
-
+      tasks[number] = getdata(number)
   }
 }

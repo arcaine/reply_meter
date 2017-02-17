@@ -1,8 +1,6 @@
 var request = require("request");
 var cheerio = require('cheerio');
 var iconv  = require('iconv-lite');
-var async = require('async');
-
 var url = "http://news.naver.com/main/main.nhn?mode=LSD&mid=shm&sid1=100#&date=2017-02-13 00:00:00&page=1"
 
 var requestOptions  = { method: "GET"
@@ -54,3 +52,35 @@ var q = async.queue(function(task,done){
     });
   })
 })
+
+
+
+async.series([
+    function(callback) {
+        // do some stuff ...
+        callback(null, 'one');
+    },
+    function(callback) {
+        // do some more stuff ...
+        callback(null, 'two');
+    }
+],
+// optional callback
+function(err, results) {
+    // results is now equal to ['one', 'two']
+});
+
+async.series({
+    one: function(callback) {
+        setTimeout(function() {
+            callback(null, 1);
+        }, 200);
+    },
+    two: function(callback){
+        setTimeout(function() {
+            callback(null, 2);
+        }, 100);
+    }
+}, function(err, results) {
+    // results is now equal to: {one: 1, two: 2}
+});
