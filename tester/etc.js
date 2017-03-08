@@ -21,6 +21,9 @@
 //   list[i] = i
 // }
 // console.log(list)
+kyung
+199538
+
 var a =201702171529
 var c = a.toString()
 var b = c.split("")
