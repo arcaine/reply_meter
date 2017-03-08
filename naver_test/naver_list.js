@@ -26,6 +26,32 @@ var getid = function(a){
  return c
 }
 
+function getTimeStamp() {
+  var d = new Date();
+
+  var s =
+    leadingZeros(d.getFullYear(), 4) + '-' +
+    leadingZeros(d.getMonth() + 1, 2) + '-' +
+    leadingZeros(d.getDate(), 2) + ' ' +
+
+    leadingZeros(d.getHours(), 2) + ':' +
+    leadingZeros(d.getMinutes(), 2) + ':' +
+    leadingZeros(d.getSeconds(), 2);
+
+  return s;
+}
+
+function leadingZeros(n, digits) {
+  var zero = '';
+  n = n.toString();
+
+  if (n.length < digits) {
+    for (i = 0; i < digits - n.length; i++)
+      zero += '0';
+  }
+  return zero + n;
+}
+
 
 var naver_list_loop =function(several_times, page, pagelimit, sid, date, callback){
   var url = "http://news.naver.com/main/list.nhn?sid1="+sid.toString()+"&listType=title&mid=sec&mode=LSD&date="+date.toString()+"&page="+page.toString()
@@ -48,8 +74,17 @@ var naver_list_loop =function(several_times, page, pagelimit, sid, date, callbac
         var article_name = $(this).find("a").text().trim();
         var article_url = $(this).find("a").attr("href");
         var article_id = getid(article_url)
+        var press = $(this).find("span.writing").text().trim();
+        var wr_date = $(this).find("span.date").text().trim();
+        var scrap_date = getTimeStamp();
         var one_article = {
-          title: article_name
+          category:"politics",
+          portal_url:article_url,
+          title: article_name,
+          cover: null,
+          press: press,
+          wr_date:wr_date,
+          scrap_date:scrap_date
         };
         one_time["n"+article_id] = one_article
       });
@@ -87,3 +122,5 @@ var naver_list = function(pagelimit,category,date,callback){
 naver_list(2,"politics",20170308,function(data){
   console.log(data)
 });
+
+export.modules = naver_list;
