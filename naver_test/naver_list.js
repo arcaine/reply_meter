@@ -119,8 +119,8 @@ var naver_list = function(pagelimit,category,date,callback){
 };
 
 //naver 리스트 용례
-naver_list(2,"politics",20170308,function(data){
-  console.log(data)
-});
+// naver_list(2,"politics",20170308,function(data){
+//   console.log(data)
+// });
 
-export.modules = naver_list;
+export.modules = naver_list
