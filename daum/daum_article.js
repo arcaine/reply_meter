@@ -133,4 +133,4 @@ var daum_article_loop = function(result_list,url_list, callback){
 // });
 // daum_article_loop("a","b",function(){});
 
-module.exports = daum_article;
+// module.exports = daum_article;

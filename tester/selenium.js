@@ -8,33 +8,6 @@ var getid = function(a){
    return c
   }
 
-  function getTimeStamp() {
-    var d = new Date();
-
-    var s =
-      leadingZeros(d.getFullYear(), 4) + '-' +
-      leadingZeros(d.getMonth() + 1, 2) + '-' +
-      leadingZeros(d.getDate(), 2) + ' ' +
-
-      leadingZeros(d.getHours(), 2) + ':' +
-      leadingZeros(d.getMinutes(), 2) + ':' +
-      leadingZeros(d.getSeconds(), 2);
-
-    return s;
-  }
-
-  function leadingZeros(n, digits) {
-    var zero = '';
-    n = n.toString();
-
-    if (n.length < digits) {
-      for (i = 0; i < digits - n.length; i++)
-        zero += '0';
-    }
-    return zero + n;
-  }
-
-
 var daum_reply_one = function(client,several_reply_result,turns,callback) {
   var k =0;
     client
@@ -55,7 +28,6 @@ var daum_reply_one = function(client,several_reply_result,turns,callback) {
               var reply_id = $(this).attr('id');
               var reply_id = "dc"+getid(reply_id)
               var contents = $(this).find('div p.desc_txt').text();
-              var scrap_date = getTimeStamp();
               var re_reply = null;
               if($(this).find('a.reply_count span span.num_txt').text()){
                 re_reply = $(this).find('a.reply_count span span.num_txt').text()
@@ -66,7 +38,6 @@ var daum_reply_one = function(client,several_reply_result,turns,callback) {
                 re_author : re_author,
                 re_contents : contents,
                 re_date : null,
-                scrap_date : scrap_date,
                 re_reply : re_reply,
                 reply_likes : null,
                 reply_hates : null
@@ -161,4 +132,3 @@ var daum_reply = function(input_list,callback){
     //     });
     //     console.log(a[a.length-1]);
     // });
-module.exports = daum_reply;
