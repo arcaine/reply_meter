@@ -1,12 +1,21 @@
 var fs = require('fs');
 var mysql = require('mysql');
+
+var path = process.cwd();
+var config = require(path+'/reply/config/config.js');
+
 var conn = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : '111111',
+  password : config.password,
   database : 'reply_meter'
 });
 conn.connect();
+
+//config 가져오기
+var start_date = config.start_date;
+var end_date = config.end_date;
+
 
 //mysql 저장 함수
 var mysql_article = require('./lib/mysql/mysql_article.js');
@@ -30,6 +39,9 @@ var naver_reply = require('./lib/reply/naver_reply.js');
 var mysql_reply = require('./lib/mysql/mysql_reply.js');
 var reply_save = mysql_reply.reply_save;
 var reply_update = mysql_reply.db_reply_update;
+
+
+
 
 
 
@@ -114,6 +126,7 @@ fs.readFile('./daum_re.json','utf8',function(err,data){
   for (i in data){
     var data_1 = {};
     data_1[i] = data[i];
+    console.log(data_1);
     reply_save(data_1,function(){
       console.log('done!')
     })
