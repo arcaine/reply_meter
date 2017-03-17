@@ -35,12 +35,7 @@ var list_save = require('./lib/mysql/list_save')(conn);
 // console.log(list_save)
 // var list_save = mysql_article.list_save;
 var find_url = require('./lib/mysql/find_url')(conn,objsize);
-var find_null_article = require('./lib/mysql/find_null_article')(conn);
 var daum_or_naver = require('./lib/mysql/daum_or_naver')(conn,objsize);
-// var find_null_article = mysql_article.find_null_article;
-// var cont_save = mysql_article.db_cont_save;
-// var find_null_reply = mysql_article.find_null_reply;
-// var daum_or_naver = mysql_article.daum_or_naver;
 
 
 //크롤링
