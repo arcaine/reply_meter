@@ -36,24 +36,25 @@ var list_save = require('./lib/mysql/list_save')(conn);
 // var list_save = mysql_article.list_save;
 var find_url = require('./lib/mysql/find_url')(conn,objsize);
 var daum_or_naver = require('./lib/mysql/daum_or_naver')(conn,objsize);
+var find_list =require('./lib/mysql/find_list')(conn);
+var daum_reply =require('./lib/reply/daum_reply');
+
+//mysql reply 함수
+var mysql_reply = require('./lib/mysql/mysql_reply.js');
+var reply_save = mysql_reply.reply_save;
+var reply_update = mysql_reply.db_reply_update;
 
 
-//크롤링
-var daum_list = require('./lib/daum_list.js');
-var naver_list = require('./lib/naver_list')();
+
 
 
 console.log('뭐라도 찍혀야 생색이 나지')
 
 
-//크롤링
-var daum_article = require('./lib/daum_article.js');
-var naver_article = require('./lib/naver_article.js');
 //댓글 크롤링
 // var daum_reply = require('./lib/reply/daum_reply.js');
-// var naver_reply = require('./lib/reply/naver_reply.js');
+var naver_reply = require('./lib/reply/naver_reply.js');
 
-var db_cont_save = require('./lib/mysql/db_cont_save')(conn);
 
 //mysql reply 함수
 // var mysql_reply = require('./lib/mysql/mysql_reply.js');
@@ -65,62 +66,35 @@ var db_cont_save = require('./lib/mysql/db_cont_save')(conn);
 var async = require('async');
 
 var tasks = [
+//   function(callback){
+//     find_list(start_date,end_date,'daum',function(data){
+//       console.log(data)
+//
+//       find_url(data,function(data_list){
+//         console.log("url_done")
+//         daum_reply(data_list,function(daum_result){
+//           reply_save(daum_result,function(){
+//             console.log("good saved!")
+//             callback(null,"daum done")
+//           })
+//         });
+//       });
+//     });
+//   },
   function(callback){
-    naver_list(start_date,end_date,1,category,function(data){
-      console.log(data);
-      list_save(data,function(){
-        console.log("naver_list_done")
-        callback(null, 'naver_done')
-      });
-    });
-  },
-  function(callback){
-    daum_list(start_date,end_date,1,category,function(data){
-      // console.log('parse finished')
-      // console.log(Object.size(data))
-      list_save(data,function(){
-        console.log("daum_list_done")
-        callback(null, "daum_done")
-      });
-    });
-  },
-  function(callback){
-    find_null_article(start_date,end_date,'daum',function(data){
-      if(data.length===0){
-        callback(null,"find_Daum")
-      }else{
-        // console.log(data)
-        find_url(data,function(result){
-          daum_article(result,function(article_result){
-            console.log("++++++++++++++++++++++++++++++++++++++++++")
-            console.log(objsize(article_result))
-            db_cont_save(article_result,function(){
-              console.log("Yeah!")
-              callback(null,"find_daum")
-            });
-          });
+    find_list(start_date,end_date,'naver',function(data){
+      find_url(data,function(data_list){
+        console.log(data_list)
+        naver_reply(data_list,function(naver_result){
+          reply_save(naver_result,function(){
+            console.log("good saved!")
+            callback(null,"naver done")
+          })
         });
+      });
+    });
+  },
 
-      }
-    });
-  },
-  function(callback){
-    find_null_article(start_date,end_date,'naver',function(data){
-      if(data.length===0){
-        console.log("NOPE")
-        callback(null,"find_naver")
-      }else{
-        find_url(data,function(result){
-          naver_article(result,function(article_result){
-            db_cont_save(article_result,function(){
-              console.log("YEah!")
-              callback(null,"find_naver")
-            })
-          });
-        });
-      }
-    });
-  },
   function(callback){
     conn.end();
     callback(null, 'ended!')
