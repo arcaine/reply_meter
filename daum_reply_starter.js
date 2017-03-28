@@ -1,5 +1,5 @@
 var Launcher = require('webdriverio').Launcher;
-var wdio = new Launcher('/dev/reply/node_modules/.bin/wdio.conf.js');
+var wdio = new Launcher('/dev/reply/node_modules/.bin/wdio.conf_daum.js');
 
 
 
