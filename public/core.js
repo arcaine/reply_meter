@@ -1,3 +1,6 @@
+// var app = angular.module('app', ['ngRoute']);
+
+
 // public/core.js
 // console.log('koay!')
 var scotchTodo = angular.module('scotchTodo', [])
@@ -18,38 +21,35 @@ var scotchTodo = angular.module('scotchTodo', [])
         .error(function(data) {
             console.log('Error: ' + data);
         });
-
-
+    $http.get('/api/today_article')
+        .success(function(data) {
+            $scope.today_article = data[0]["count(*)"];
+            console.log(data);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
+    $http.get('/api/today_reply')
+        .success(function(data) {
+            $scope.today_reply = data[0]["count(*)"];
+            console.log(data);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
+    $http.get('/api/article')
+        .success(function(data) {
+            $scope.tod = data[0]["count(*)"];
+            console.log(data);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
 });
-console.log('koay!');
 
-// function mainController($scope, $http){
-    // $scope.formData = {};
-
-    // when landing on the page, get all todos and show them
-
-    // when submitting the add form, send the text to the node API
-    // $scope.createTodo = function() {
-    //     $http.post('/api/todos', $scope.formData)
-    //         .success(function(data) {
-    //             $scope.formData = {}; // clear the form so our user is ready to enter another
-    //             $scope.todos = data;
-    //             console.log(data);
-    //         })
-    //         .error(function(data) {
-    //             console.log('Error: ' + data);
-    //         });
-    // };
-
-    // delete a todo after checking it
-    // $scope.deleteTodo = function(id) {
-    //     $http.delete('/api/todos/' + id)
-    //         .success(function(data) {
-    //             $scope.todos = data;
-    //             console.log(data);
-    //         })
-    //         .error(function(data) {
-    //             console.log('Error: ' + data);
-    //         });
-    // };
-// }
+// scotchTodo.config(function($routeProvider) {
+//   $routeProvider
+//     .when('/test', {
+//       template: '<span>heyhey</span>'
+//     })
+// });

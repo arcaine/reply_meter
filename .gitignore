@@ -1,3 +1,5 @@
 node_modules/
 config/
 errorShots/
+public/assets/
+tester/

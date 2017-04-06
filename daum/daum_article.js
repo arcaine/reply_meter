@@ -99,7 +99,11 @@ var daum_article_loop = function(result_list,url_list, callback){
     var contents = contents.html();
     console.log(contents);
     var wr_date = $("div.head_view span.info_view span.txt_info").text();
-    wr_date = find_date(wr_date);
+    if(wr_date.length>0){
+      wr_date = find_date(wr_date);
+    }else{
+      
+    }
     var scrap_date = getTimeStamp();
     // var original_url =  $("div.article_info div.sponsor").find("div.article_btns a.pi_btn").attr('href');
     // var likes = parseInt(likes);

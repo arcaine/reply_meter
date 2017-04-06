@@ -97,138 +97,149 @@ describe('crwaling reply', function() {
   describe('real crawl',function(){
     it('daum', function() {
       var result = {};
+      // browser.url_list = [["a",{"portal_url":"http://v.media.daum.net/v/20170329173936235"}],["b",{"portal_url":"http://v.media.daum.net/v/20170329172412702"}]]
       browser.waitUntil(function(){
         return browser.url_list != undefined
       })
-      url_list =browser.url_list
+      var url_list =browser.url_list
       for(i in url_list){
         var url = url_list[i][1].portal_url;
         var portal_id = url_list[i][0];
         browser.url(url);
-        var result_one ={};
-        // var k = 0;
-        // var isExisting = ;
-        // console.log('cheasd;l');
-        // console.log(isExisting);
-        // console.log(isExisting===false);
-        var several_reply_result = {};
-        var a = true;
-        // .getHTML(selector[,includeSelectorTag]);
-        var comments =browser.getHTML('div.alex_single');
-        var cheerio_obj = cheerio.load(comments);
-        var cheerio_obj_length = cheerio_obj('div.cmt_box').children().length;
-        // var cheerio_obj_length =cheerio_obj.length
-        // var comments_list = comments.length;
-        console.log(cheerio_obj_length)
-        if(cheerio_obj_length!=5){
-          a = false
+        var checker =browser.getHTML('div.alex_single');
+        var check_reply_one = cheerio.load(checker);
+        var check_reply = check_reply_one('div.cmt_none').find('p.txt_not').text().length;
+        console.log('길이는')
+        console.log(check_reply)
+        if(check_reply===0){
+
+                  var result_one ={};
+                  // var k = 0;
+                  // var isExisting = ;
+                  // console.log('cheasd;l');
+                  // console.log(isExisting);
+                  // console.log(isExisting===false);
+                  var several_reply_result = {};
+                  var a = true;
+                  // .getHTML(selector[,includeSelectorTag]);
+                  var comments =browser.getHTML('div.alex_single');
+                  var cheerio_obj = cheerio.load(comments);
+                  var cheerio_obj_length = cheerio_obj('div.cmt_box').children().length;
+                  // var cheerio_obj_length =cheerio_obj.length
+                  // var comments_list = comments.length;
+                  console.log(cheerio_obj_length)
+                  if(cheerio_obj_length!=5){
+                    var a = false
+                  }else{
+                    var a = true
+                  }
+                  // console.log(a);
+                  var k = 0;
+                  // var div_check = browser.$('div.cmt_box');
+                  // var div_check = div_check.length;
+                  // console.log(div_check)
+                  // console.log(whole_reply)
+                  var post_count_before =browser.$$("ul.list_comment li");
+                  var count_length_before = post_count_before.length;
+                  var count_length_after = 0;
+                  // console.log(count_length_before<count_length_before);
+                  // console.log(a)
+                  while(a && count_length_before != count_length_after){
+                    console.log('click!')
+
+                    // var post_count_before =post_count_after;
+                    var count_length_before =count_length_after;
+                    // console.log(count_length_before);
+                      // setTimeout(function(){
+                        browser.click('div.alex_more a.link_fold')
+
+                        // browser.on('error',function(e){
+                        //   throw(e)
+                        //   console.log(e.body.value);
+                        //   a = false;
+                        //   k = 1;
+                        // })
+                        browser.pause(700);
+                        // browser.on('error',function(error){
+                        //   throw(error)
+                        // })
+                        console.log('check1')
+
+                        // // div_check = browser.$('div.cmt_box');
+                        // // div_check = div_check.length;
+                        //
+                        // // console.log(div_check)
+                        // browser
+                        // browser.then(function(result){
+                          // console.log(result);
+                          // if(result===true){
+                        // var b =browser.getHTML('body');
+                        var comments =browser.getHTML('div.alex_single');
+                        var cheerio_obj = cheerio.load(comments);
+                        var cheerio_obj_length = cheerio_obj('div.cmt_box').children().length;
+                        // var cheerio_obj_length =cheerio_obj.length
+                        // var comments_list = comments.length;
+                        // console.log(cheerio_obj_length)
+                        if(cheerio_obj_length!=5){
+                          var a = false
+                        }else{
+                          var a = true
+                        }
+                        // console.log(a)
+                        // console.log('check2')
+                        var post_count_after =browser.getHTML("ul.list_comment");
+                        var post_count = cheerio.load(post_count_after)
+                        var count_length_after = post_count('li').length
+                        // var count_length_after =post_count_after.length;
+                          // }else{
+                            // a = false;
+                          // }
+                        console.log("clicking")
+                        console.log("button alive?:")
+                        console.log(a)
+                        console.log("new comments? should be <")
+                        console.log(count_length_before)
+                        console.log(count_length_after)
+
+                        // });
+                  }
+                  console.log('crawl start');
+
+                  var post_list =browser.$$("ul.list_comment li");
+                  for(i in post_list){
+                    var post = post_list[i];
+                    var re_author = post.$('div.cmt_info strong span.info_author a.link_nick.clickable').getText().trim();
+                    var reply_id = post.getAttribute('id');
+                    var reply_id = "dc"+getid(reply_id);
+                    var contents = post.$('div p.desc_txt').getText();
+                    var scrap_date = getTimeStamp();
+                    var re_reply = null;
+                    // var checkexist = post.isExisting('a.reply_count span span.num_txt')
+                    // if(checkexist){
+                    //   re_reply = post.$('a.reply_count span span.num_txt').getText()
+                    //   re_reply = parseInt(re_reply);
+                    // }
+                    var one_reply_result = {
+                      re_author : re_author,
+                      re_contents : contents,
+                      re_date : null,
+                      scrap_date : scrap_date,
+                      re_reply : null,
+                      reply_likes : null,
+                      reply_hates : null,
+                      portal_name : 'daum'
+                    }
+                    // console.log(one_reply_result);
+                    several_reply_result[reply_id] = one_reply_result;
+                  }
+                    result_one[portal_id] = several_reply_result;
+                    console.log(result_one)
+                    reply_save(result_one,function(){
+                      console.log('save done')
+                    })
         }else{
-          a = true
+          console.log("댓글이 없으니 패스")
         }
-        // console.log(a);
-        var k = 0;
-        // var div_check = browser.$('div.cmt_box');
-        // var div_check = div_check.length;
-        // console.log(div_check)
-        // console.log(whole_reply)
-        var post_count_before =browser.$$("ul.list_comment li");
-        var count_length_before = post_count_before.length;
-        var count_length_after = 0;
-        // console.log(count_length_before<count_length_before);
-        // console.log(a)
-        while(a && count_length_before != count_length_after){
-          console.log('click!')
-
-          // var post_count_before =post_count_after;
-          var count_length_before =count_length_after;
-          // console.log(count_length_before);
-            // setTimeout(function(){
-              browser.click('div.alex_more a.link_fold')
-
-              // browser.on('error',function(e){
-              //   throw(e)
-              //   console.log(e.body.value);
-              //   a = false;
-              //   k = 1;
-              // })
-              browser.pause(700);
-              // browser.on('error',function(error){
-              //   throw(error)
-              // })
-              console.log('check1')
-
-              // // div_check = browser.$('div.cmt_box');
-              // // div_check = div_check.length;
-              //
-              // // console.log(div_check)
-              // browser
-              // browser.then(function(result){
-                // console.log(result);
-                // if(result===true){
-              // var b =browser.getHTML('body');
-              var comments =browser.getHTML('div.alex_single');
-              var cheerio_obj = cheerio.load(comments);
-              var cheerio_obj_length = cheerio_obj('div.cmt_box').children().length;
-              // var cheerio_obj_length =cheerio_obj.length
-              // var comments_list = comments.length;
-              // console.log(cheerio_obj_length)
-              if(cheerio_obj_length!=5){
-                a = false
-              }else{
-                a = true
-              }
-              // console.log(a)
-              // console.log('check2')
-              var post_count_after =browser.getHTML("ul.list_comment");
-              var post_count = cheerio.load(post_count_after)
-              var count_length_after = post_count('li').length
-              // var count_length_after =post_count_after.length;
-                // }else{
-                  // a = false;
-                // }
-              console.log("clicking")
-              console.log("button alive?:")
-              console.log(a)
-              console.log("new comments? should be <")
-              console.log(count_length_before)
-              console.log(count_length_after)
-
-              // });
-        }
-        console.log('crawl start');
-        var post_list =browser.$$("ul.list_comment li");
-        for(i in post_list){
-          var post = post_list[i];
-          var re_author = post.$('div.cmt_info strong span.info_author a.link_nick.clickable').getText().trim();
-          var reply_id = post.getAttribute('id');
-          var reply_id = "dc"+getid(reply_id);
-          var contents = post.$('div p.desc_txt').getText();
-          var scrap_date = getTimeStamp();
-          var re_reply = null;
-          // var checkexist = post.isExisting('a.reply_count span span.num_txt')
-          // if(checkexist){
-          //   re_reply = post.$('a.reply_count span span.num_txt').getText()
-          //   re_reply = parseInt(re_reply);
-          // }
-          var one_reply_result = {
-            re_author : re_author,
-            re_contents : contents,
-            re_date : null,
-            scrap_date : scrap_date,
-            re_reply : null,
-            reply_likes : null,
-            reply_hates : null,
-            portal_name : 'daum'
-          }
-          // console.log(one_reply_result);
-          several_reply_result[reply_id] = one_reply_result;
-        }
-          result_one[portal_id] = several_reply_result;
-          console.log(result_one)
-          reply_save(result_one,function(){
-            console.log('save done')
-          })
-
       }
     })
     // it('asdad',function(){

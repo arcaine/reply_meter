@@ -43,6 +43,7 @@ var daum_or_naver = require('./lib/mysql/daum_or_naver')(conn,objsize);
 // var daum_or_naver = mysql_article.daum_or_naver;
 
 
+
 //크롤링
 var daum_list = require('./lib/daum_list.js');
 var naver_list = require('./lib/naver_list')();

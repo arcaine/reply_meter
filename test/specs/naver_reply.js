@@ -119,6 +119,7 @@ var reply_save =mysql_reply.reply_save;
       });
       describe('itstherealone',function(){
         it('naver', function() {
+          // browser.url_list =[['a',{"portal_url":"http://news.naver.com/main/ranking/read.nhn?mid=etc&sid1=111&rankingType=popular_day&oid=025&aid=0002699317&date=20170329&type=1&rankingSeq=2&rankingSectionId=100"}]]
           browser.waitUntil(function(){
             return browser.url_list != undefined
           })
@@ -144,90 +145,64 @@ var reply_save =mysql_reply.reply_save;
                     // setTimeout(function(){
                     browser.url(url);
                     console.log(browser.getUrl());
+                    browser.pause(1000);
+                    var comments =browser.getHTML('body');
+                    var cheerio_obj = cheerio.load(comments);
+                    var cheerio_obj_length = cheerio_obj('div#cbox_module').find('span.u_cbox_contents_none').text().length;
+                    console.log('길이는')
+                    console.log(cheerio_obj_length)
+                    if(cheerio_obj_length===0){
+                        browser.pause(10000);
+                        var a = browser.$$('div#cbox_module div.u_cbox_paginate')[0].getCssProperty('display');
 
-                    var result_one ={};
-                    // console.log(browser.url)
-                    // var k = 0;
-                    // var isExisting = ;
-                    // console.log('cheasd;l');
-                    // console.log(isExisting);
-                    // console.log(isExisting===false);
-                    var several_reply_result = {};
-                    browser.waitForVisible("div.u_cbox_content_wrap ul.u_cbox_list li",10000);
-                    var a = browser.$$('div#cbox_module div.u_cbox_paginate')[0].getCssProperty('display');
-                    // console.log(a.value);
-                    var k = 0;
-                    // var div_check = browser.$('div.cmt_box');
-                    // var div_check = div_check.length;
-                    // console.log(div_check)
-                    // console.log(whole_reply)
-                    // var post_count_before =browser.$$("div.u_cbox_content_wrap ul.u_cbox_list li");
-                    // var count_length_before = post_count_before.length;
-                    // var count_length_after = 0;
-                    // console.log(count_length_before<count_length_before);
-                    // console.log(a)
-                    // && count_length_before != count_length_after
-                    while(a.value==='block' ){
-                      console.log('cick!')
+                      var result_one ={};
+                      var several_reply_result = {};
+                      var k = 0;
 
-                      // var post_count_before =browser.$$("div.u_cbox_content_wrap ul.u_cbox_list li");
-                      // var count_length_before =post_count_before.length;
-                      // console.log(count_length_before);
-                        // setTimeout(function(){
-                          browser.click('div#cbox_module div.u_cbox_paginate')
+                      while(a.value==='block'){
+                        console.log('cick!')
 
-                          // browser.on('error',function(e){
-                          //   throw(e)
-                          //   console.log(e.body.value);
-                          //   a = false;
-                          //   k = 1;
-                          // })
-                          // browser.waitForExist("div.u_cbox_content_wrap ul.u_cbox_list li",30);
+                            browser.click('div#cbox_module div.u_cbox_paginate')
+                            browser.pause(500);
+                            a = browser.$$('div#cbox_module div.u_cbox_paginate')[0].getCssProperty('display');
 
-                          // var b =browser.getHTML('body');
-                          a = browser.$$('div#cbox_module div.u_cbox_paginate')[0].getCssProperty('display');
-                          // var post_count_after =browser.$$("div.u_cbox_content_wrap ul.u_cbox_list li");
-                          // var count_length_after =post_count_after.length;
-                            // }else{
-                              // a = false;
-                            // }
-                          console.log(a)
-                          // console.log(count_length_after)
+                            console.log(a)
 
-                          // });
-                    }
-                    // console./
-                    var post_list =browser.$$("div.u_cbox_content_wrap ul.u_cbox_list li");
-                    for(i in post_list){
-                      var post = post_list[i];
-                      var re_author = post.$('div.u_cbox_comment_box div.u_cbox_area span.u_cbox_nick').getText().trim();
-                      var reply_id = post.getAttribute('data-info');
-                      var reply_id = "nc"+getid(reply_id);
-                      var contents = post.$('div.u_cbox_text_wrap').getText();
-                      var scrap_date = getTimeStamp();
-                      var re_reply = null;
-                      var re_date = post.$('span.u_cbox_date').getText().trim();
-
-                      var one_reply_result = {
-                        re_author : re_author,
-                        re_contents : contents,
-                        re_date : re_date,
-                        scrap_date : scrap_date,
-                        re_reply : null,
-                        reply_likes : null,
-                        reply_hates : null,
-                        portal_name : 'naver'
                       }
-                      // console.log(one_reply_result);
-                      several_reply_result[reply_id] = one_reply_result;
-                      console.log(several_reply_result);
+                      var post_list =browser.$$("div.u_cbox_content_wrap ul.u_cbox_list li");
+                      for(i in post_list){
+                        var post = post_list[i];
+                        var re_author = post.$('div.u_cbox_comment_box div.u_cbox_area span.u_cbox_nick').getText().trim();
+                        var reply_id = post.getAttribute('data-info');
+                        var reply_id = "nc"+getid(reply_id);
+                        var contents = post.$('div.u_cbox_text_wrap').getText();
+                        var scrap_date = getTimeStamp();
+                        var re_reply = null;
+                        var re_date = post.$('span.u_cbox_date').getText().trim();
+
+                        var one_reply_result = {
+                          re_author : re_author,
+                          re_contents : contents,
+                          re_date : re_date,
+                          scrap_date : scrap_date,
+                          re_reply : null,
+                          reply_likes : null,
+                          reply_hates : null,
+                          portal_name : 'naver'
+                        }
+                        // console.log(one_reply_result);
+                        several_reply_result[reply_id] = one_reply_result;
+                        console.log(several_reply_result);
+                      }
+                      console.log(portal_id)
+                        result_one[portal_id] = several_reply_result;
+                        console.log(result_one)
+                        reply_save(result_one,function(){
+                          console.log('save done')
+                      })
+                    }else{
+                      console.log('댓글이 없으니 넘어갑시다')
                     }
-                    console.log(portal_id)
-                      result_one[portal_id] = several_reply_result;
-                      console.log(result_one)
-                      reply_save(result_one,function(){
-                        console.log('save done')
-                    })
                   };
                 // });
                 // });//콜백지옥 라스트
