@@ -112,6 +112,7 @@ var tasks = [
   },
   function(callback){
     find_null_article(start_date,end_date,'naver',function(data){
+      console.log(data)
       if(data.length===0){
         console.log("NOPE")
         callback(null,"find_naver")
