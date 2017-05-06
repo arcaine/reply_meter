@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 // app.use(express.static('public'));
 
 //jade 설정
@@ -62,19 +63,35 @@ app.post('/message', (req, res) => {
         type: req.body.type,
         content: req.body.content
     };
-    let massage = {
-        "message": {
-            "text": '응답 메세지...'
-        },
-        "keyboard": {
-            "type": "buttons",
-            "buttons": [
-                "메뉴1",
-                "메뉴2",
-                "메뉴3"
-            ]
-        }
-    };
+    if(_obj.content==="기사"){
+      let massage = {
+          "message": {
+              "text": '응답 메세지...'
+          },
+          "keyboard": {
+              "type": "buttons",
+              "buttons": [
+                  "메뉴1",
+                  "메뉴2",
+                  "메뉴3"
+              ]
+          }
+      };
+    }else{
+      let massage = {
+          "message": {
+              "text": '응답 메세지...'
+          },
+          "keyboard": {
+              "type": "buttons",
+              "buttons": [
+                  "메뉴1",
+                  "메뉴2",
+                  "메뉴3"
+              ]
+          }
+      };
+    }
     res.set({
         'content-type': 'application/json'
     }).send(JSON.stringify(massage));
@@ -126,16 +143,6 @@ app.get('/api/article:id',function(req,res){
   })
 });
 
-app.get('/keyboard', (req, res) => {
-  const menu = {
-      type: 'buttons',
-      buttons: ["메뉴1", "메뉴2", "메뉴3"]
-  };
-
-  res.set({
-      'content-type': 'application/json'
-  }).send(JSON.stringify(menu));
-});
 
 
 
